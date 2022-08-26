@@ -6,7 +6,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
+import { Metrics } from './metrics.entity';
+
 import { Tribe } from './tribe.entity';
 
 export enum StateTypeEnum {
@@ -46,8 +49,12 @@ export class Repository {
   @JoinColumn({ name: 'id_tribe' })
   tribe: Tribe;
 
+  @OneToOne(() => Metrics, (metrics) => metrics.repository)
+  metrics: Metrics;
+
   @CreateDateColumn()
   created_at: Date;
+
   @UpdateDateColumn()
   updated_at: Date;
 }
