@@ -1,0 +1,15 @@
+{
+    "type": "postgres",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "postgres",
+    "password": "1234",
+    "database": "challenge",
+    "entities": ["src/**/**/*.entity.ts"],
+    "synchronize": false,
+    "migrationsTableName": "migrations",
+    "migrations": ["src/orm/migrations/*.ts"],
+    "cli": {
+        "migrationsDir": "src/orm/migrations"
+    }
+}
