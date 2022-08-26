@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { ResponseMetricsModel } from '../models/organization.model';
 import {
   ITribe,
@@ -24,10 +24,11 @@ export class RepositoryService {
     const tribe = await this.tribeRepository.findOne({
       idTribe: id,
     });
+    console.log(tribe);
     if (!tribe) {
       return responseMetricsErrors.notMetrics;
     }
-    const result = await this.queryTribeRepository();
+    const result = await this.queryTribeRepository(id);
     if (!result.length) {
       return responseMetricsErrors.notCoverage;
     }
@@ -37,7 +38,7 @@ export class RepositoryService {
     return await this.transFormatData(resync, repositories);
   }
 
-  async queryTribeRepository(): Promise<Partial<ITribe>[] | null> {
+  async queryTribeRepository(id: number): Promise<Partial<ITribe>[] | null> {
     const after: Date = new Date(dayjs().startOf('year').toString());
     const before: Date = new Date(dayjs().endOf('year').toString());
     const result = await this.tribeRepository
@@ -62,6 +63,7 @@ export class RepositoryService {
       ])
       .where("repository.state = 'E'")
       .andWhere('metrics.coverage > 73')
+      .andWhere('tribe.id_tribe = :id', { id })
       .andWhere('metrics.createTime >= :after', { after })
       .andWhere('repository.createTime < :before', { before })
       .getMany();
