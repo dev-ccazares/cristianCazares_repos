@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Organization } from './organization.entity';
+import { Repository } from './respository.entity';
 
 @Entity()
 export class Tribe {
@@ -19,6 +21,8 @@ export class Tribe {
   @ManyToOne(() => Organization, (organization) => organization.tribe)
   @JoinColumn({ name: 'id_organization' })
   organization: Organization;
+  @OneToMany(() => Repository, (repository) => repository.tribe)
+  repository: Repository[];
 
   @CreateDateColumn() created_at: Date;
   @UpdateDateColumn() updated_at: Date;
