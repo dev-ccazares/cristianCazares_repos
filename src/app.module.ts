@@ -21,7 +21,9 @@ import { OrganizationModule } from './organization/organization.module';
         extra: {
           options: configService.get('DB_CLOUSTER'),
         },
-        entities: [],
+        entities: ['dist/modules/organization/entities/*.entity{.ts,.js}'],
+        retryDelay: 3000,
+        retryAttempts: 10,
         synchronize: true,
       }),
       inject: [ConfigService],
