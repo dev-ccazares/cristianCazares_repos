@@ -4,12 +4,11 @@ import { Repository } from 'typeorm';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { Organization } from './entities/organization.entity';
-import { OrganizationModel } from './organization.model';
 @Injectable()
 export class OrganizationService {
   constructor(
     @InjectRepository(Organization)
-    private readonly organizationRepository: Repository<Organization>,
+    private organizationRepository: Repository<Organization>,
   ) {}
 
   async create(createOrganizationDto: CreateOrganizationDto) {
@@ -21,14 +20,14 @@ export class OrganizationService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} organization`;
+    return this.organizationRepository.findOne(id);
   }
 
   update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
-    return `This action updates a #${id} organization`;
+    return this.organizationRepository.update(id, updateOrganizationDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} organization`;
+    return this.organizationRepository.delete(id);
   }
 }

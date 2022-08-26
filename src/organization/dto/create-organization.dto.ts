@@ -1,14 +1,25 @@
-import { Expose } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Max,
+  IsNotEmpty,
+} from 'class-validator';
+
 export class CreateOrganizationDto {
-  @Expose()
   @IsNumber()
+  @IsNotEmpty()
   @IsOptional()
-  readonly idOrganization: number;
-  @Expose()
+  idOrganization: number;
+
   @IsString()
-  readonly name: string;
-  @Expose()
+  @IsNotEmpty()
+  @MaxLength(50)
+  name: string;
+
   @IsNumber()
-  readonly status: number;
+  @IsNotEmpty()
+  @Max(9999999999)
+  status: number;
 }
