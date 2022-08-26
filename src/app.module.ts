@@ -11,15 +11,19 @@ import { OrganizationModule } from './organization/organization.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: 'cockroachdb',
         host: configService.get('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
+        ssl: true,
+        extra: {
+          options: configService.get('DB_CLOUSTER'),
+        },
         entities: ['dist/organization/entities/*.entity{.ts,.js}'],
-        retryDelay: 3000,
         retryAttempts: 10,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
