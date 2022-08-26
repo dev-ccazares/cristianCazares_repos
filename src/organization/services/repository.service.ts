@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as dayjs from 'dayjs';
-import { ITribe } from '../interfaces/all.interface';
+import dayjs from 'dayjs';
+import { ResponseMetricsModel } from '../models/organization.model';
+import {
+  ITribe,
+  IDataRequest,
+  IResponseHttpStatus,
+} from '../interfaces/all.interface';
 import { Tribe } from '../entities/tribe.entity';
-import { responseMetricsErrors } from '../constants.all';
+import { listStatusRepository, responseMetricsErrors } from '../constants.all';
 import { HttpExternalService } from '../../core/http/http.service';
 
 @Injectable()
@@ -28,8 +33,8 @@ export class RepositoryService {
     }
 
     const { repositories } = await this.httpExternalService.getStatesList();
-
-    return tribe;
+    const resync: any = { ...result[0] };
+    return await this.transFormatData(resync, repositories);
   }
 
   async queryTribeRepository(): Promise<Partial<ITribe>[] | null> {
@@ -62,5 +67,28 @@ export class RepositoryService {
       .getMany();
 
     return result;
+  }
+
+  async transFormatData(
+    data: Partial<IDataRequest>,
+    repositories: IResponseHttpStatus[],
+  ): Promise<Partial<ResponseMetricsModel>[]> {
+    const obj = data.repository.map((element) => {
+      return {
+        id: data.idTribe,
+        name: element.name,
+        tribe: data.name,
+        organization: data?.organization?.name,
+        coverage: element?.metrics?.coverage + ' %',
+        codeSmells: element?.metrics?.codeSmells,
+        bugs: element?.metrics?.bugs,
+        vulnerabilities: element?.metrics?.vulnerabilities,
+        hotspots: element?.metrics?.hotspots,
+        verificationState: repositories.find((res) => res.state == data.status)
+          ?.name,
+        state: listStatusRepository.find((lr) => lr.id === element.state)?.name,
+      };
+    });
+    return obj;
   }
 }

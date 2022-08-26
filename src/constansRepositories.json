@@ -2,15 +2,18 @@
     "repositories": [
         {
             "id": 1,
-            "state": 604
+            "state": 604,
+            "name": " Verificado"
         },
         {
             "id": 2,
-            "state": 605
+            "state": 605,
+            "name": "En espera"
         },
         {
             "id": 3,
-            "state": 606
+            "state": 606,
+            "name": "Aprobado"
         }
     ]
 }
