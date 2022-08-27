@@ -18,7 +18,7 @@ export class RepositoryService {
   constructor(
     @InjectRepository(Tribe)
     private tribeRepository: Repository<Tribe>,
-    private readonly httpExternalService: HttpExternalService,
+    private httpExternalService: HttpExternalService,
   ) {}
 
   async findOne(id: number) {

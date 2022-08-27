@@ -58,7 +58,7 @@ export class OrganizationController {
 
   @Delete(':id')
   @ApiResponse({ status: 200, description: 'Organization Delete' })
-  remove(@Param('id') id: string) {
-    return this.organizationService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.organizationService.remove(id);
   }
 }
