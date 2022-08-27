@@ -4,10 +4,6 @@ import * as constansRepositories from './constansRepositories.json';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'hola';
-  }
-
   getConstantsRepositories(): IResponseVerification {
     const result: IRepositorie[] = constansRepositories.repositories;
     return { repositories: result };
