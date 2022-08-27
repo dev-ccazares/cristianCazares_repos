@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
-import { ResponseMetricsModel } from '../models/organization.model';
+import { Parser } from 'json2csv';
+import { Repository } from 'typeorm';
+import { HttpExternalService } from '../../core/http/http.service';
+import { listStatusRepository, responseMetricsErrors } from '../constants.all';
+import { Tribe } from '../entities/tribe.entity';
 import {
-  ITribe,
   IDataRequest,
   IResponseHttpStatus,
+  ITribe,
 } from '../interfaces/all.interface';
-import { Tribe } from '../entities/tribe.entity';
-import { listStatusRepository, responseMetricsErrors } from '../constants.all';
-import { HttpExternalService } from '../../core/http/http.service';
+import { ResponseMetricsModel } from '../models/organization.model';
 
 @Injectable()
 export class RepositoryService {
@@ -24,7 +25,6 @@ export class RepositoryService {
     const tribe = await this.tribeRepository.findOne({
       idTribe: id,
     });
-    console.log(tribe);
     if (!tribe) {
       return responseMetricsErrors.notMetrics;
     }
@@ -36,6 +36,22 @@ export class RepositoryService {
     const { repositories } = await this.httpExternalService.getStatesList();
     const resync: any = { ...result[0] };
     return await this.transFormatData(resync, repositories);
+  }
+
+  async getDownloadMetrics(id: number) {
+    const result = await this.findOne(id);
+    if (!Array.isArray(result) || !result.length) {
+      return !Array.isArray(result) && !result.length
+        ? responseMetricsErrors.notMetrics
+        : result;
+    }
+    const fileDownload = [];
+    result.forEach((r) => {
+      fileDownload.push({ ...r });
+    });
+    const csvFields = Object.keys(result[0]);
+    const csvParser = new Parser({ csvFields });
+    return csvParser.parse(fileDownload);
   }
 
   async queryTribeRepository(id: number): Promise<Partial<ITribe>[] | null> {
