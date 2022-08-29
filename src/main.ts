@@ -10,8 +10,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   const config = new DocumentBuilder()
-    .setTitle('Challenge Backend De Una!')
-    .setDescription('Banco Pichincha')
+    .setTitle('Documentacion!')
+    .setDescription('Cristian Cazares')
     .setVersion('1.0')
     .addTag('organization')
     .addTag('repository')
