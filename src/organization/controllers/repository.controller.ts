@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { RepositoryService } from '../services/repository.service';
 import { Response } from 'express';
-import { ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('repository')
 @Controller('repository')

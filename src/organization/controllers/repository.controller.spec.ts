@@ -25,4 +25,24 @@ describe('RepositoryController', () => {
   it('RepositoryService should be defines', () => {
     expect(service).toBeDefined();
   });
+  it('Get Repository Metrics List', async () => {
+    const result = await service.findOne(1);
+
+    expect(result.length).toEqual(3);
+  });
+  it('Get Repository Metrics List Fail', async () => {
+    const result = await service.findOne(2);
+
+    expect(result.length).toEqual(0);
+  });
+  it('Get Verify', async () => {
+    const result = await service.getDownloadMetrics(1);
+
+    expect(result).toEqual(true);
+  });
+  it('Get Download Fail', async () => {
+    const result = await service.getDownloadMetrics(2);
+
+    expect(result).toEqual(false);
+  });
 });
