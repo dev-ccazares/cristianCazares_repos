@@ -14,6 +14,9 @@ export class Organization {
   @Column({ name: 'status', type: 'int', width: 10 })
   status: number;
 
+  @Column({ name: 'url', type: 'varchar', length: 50, nullable: true })
+  url: string;
+
   @OneToMany(() => Tribe, (tribe) => tribe.organization)
   tribe: Tribe[];
 }
